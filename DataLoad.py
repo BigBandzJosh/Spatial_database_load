@@ -61,22 +61,6 @@ def test_read_gpkg(file_path):
 
     
 def update_table():
-  sql = """UPDATE transit.transit_route 
-             SET route = ST_GeomFromText(%s, 2961) 
-             WHERE route_number_full = %s;"""
-  
-  with fiona.open('transit_transformed.gpkg', mode='r') as gpkg:
-     with connect_db() as conn:
-       with conn.cursor() as cur:
-         for feature in gpkg:
-           geom = shapely.geometry.shape(feature['geometry'])
-           geom_wkt = geom.wkt
-           route_number_full = feature['properties']['route_number_full']
-           cur.execute(sql, (geom_wkt, route_number_full))
-           conn.commit()
-           print(f'Updated route {route_number_full}')
-    
-
  
 
 if __name__ == '__main__':
